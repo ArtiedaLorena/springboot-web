@@ -2,7 +2,9 @@ package com.lorena.curso.springboot.webapp.springboot_web.controllers;
 
 import com.lorena.curso.springboot.webapp.springboot_web.models.User;
 import com.lorena.curso.springboot.webapp.springboot_web.models.dto.ParamDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -33,6 +35,9 @@ public class PathVariableController {
     @Value("#{${config.valuesMap}.description}")
     private String description;
 
+    @Autowired
+    private Environment env;
+
     //Ejemplo: http://localhost:8080/api/var/baz/hola
     @GetMapping("/baz/{message}")
     public ParamDto baz(@PathVariable String message) {
@@ -61,7 +66,9 @@ public class PathVariableController {
         Map<String, Object> json = new HashMap<>();
         json.put("username", username);
         json.put("code", code);
+        json.put("code2", env.getProperty("config.code", Long.class));
         json.put("message", message);
+        json.put("message2", env.getProperty("config.message"));
         json.put("listOfValues",listOfValues);
         json.put("valuesMap", valuesMap);
         json.put("product", product);
